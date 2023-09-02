@@ -1,0 +1,29 @@
+---
+name: 'DefectDojo-Inc Lint'
+description: 'Run linters with standardized configuration'
+author: 'cneill'
+inputs:
+  go-version:
+    description: 'The version of Go to set up for linting with golangci-lint'
+    default: '1.21'
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Check out target repo
+      uses: actions/checkout@v3
+
+    - name: Check out action-lint repo
+      run: git clone https://github.com/DefectDojo-Inc/lint-action.git ${{ github.workspace }}/lint-action
+      shell: bash
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '${{ inputs.go-version }}'
+
+    - name: Run golangci-lint
+      uses: golangci/golangci-lint-action@v3  # TODO: replace with commit hash?
+      with:
+        args: "--config ${{ github.workspace }}/lint-action/.golangci.yml --go ${{ inputs.go-version }}"
+        version: latest  # TODO: replace with commit hash?
