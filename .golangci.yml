@@ -2,6 +2,7 @@
 linters:
   enable-all: true
   disable:
+    - bodyclose         # this should all be handled by httpclient, but linter isn't smart enough to detect - enable case-by-case later?
     - deadcode          # deprecated
     - depguard          # annoying - must maintain a constant whitelist of import-able packages
     - exhaustruct       # annoying - forces full struct initializations
