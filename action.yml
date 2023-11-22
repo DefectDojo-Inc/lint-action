@@ -28,14 +28,14 @@ runs:
 
     - name: Run golangci-lint (global config)
       uses: golangci/golangci-lint-action@v3  # TODO: replace with commit hash?
-      if: ${{ inputs.custom-config == false }}
+      if: ${{ inputs.custom-config == 'false' }}
       with:
         args: "--config ${{ github.workspace }}/lint-action/.golangci.yml --go ${{ inputs.go-version }}"
         version: latest  # TODO: replace with commit hash?
 
     - name: Run golangci-lint (repo config)
       uses: golangci/golangci-lint-action@v3  # TODO: replace with commit hash?
-      if: ${{ inputs.custom-config == true }}
+      if: ${{ inputs.custom-config == 'true' }}
       with:
         args: "--go ${{ inputs.go-version }}"
         version: latest  # TODO: replace with commit hash?
