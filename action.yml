@@ -7,6 +7,10 @@ inputs:
     description: 'The version of Go to set up for linting with golangci-lint'
     default: '1.21'
     required: false
+  custom-config:
+    desciption: 'Set this to true if you want to lint your repo with the .golangci.yml file in your repository'
+    default: false
+    required: false
 runs:
   using: "composite"
   steps:
@@ -22,8 +26,16 @@ runs:
       with:
         go-version: '${{ inputs.go-version }}'
 
-    - name: Run golangci-lint
+    - name: Run golangci-lint (global config)
       uses: golangci/golangci-lint-action@v3  # TODO: replace with commit hash?
+      if: inputs.custom-config == false
       with:
         args: "--config ${{ github.workspace }}/lint-action/.golangci.yml --go ${{ inputs.go-version }}"
+        version: latest  # TODO: replace with commit hash?
+
+    - name: Run golangci-lint (repo config)
+      uses: golangci/golangci-lint-action@v3  # TODO: replace with commit hash?
+      if: inputs.custom-config
+      with:
+        args: "--go ${{ inputs.go-version }}"
         version: latest  # TODO: replace with commit hash?
