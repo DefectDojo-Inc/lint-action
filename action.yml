@@ -15,14 +15,14 @@ runs:
   using: "composite"
   steps:
     - name: Check out target repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Check out action-lint repo
       run: git clone https://github.com/DefectDojo-Inc/lint-action.git ${{ github.workspace }}/lint-action
       shell: bash
 
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
         go-version: '${{ inputs.go-version }}'
 
