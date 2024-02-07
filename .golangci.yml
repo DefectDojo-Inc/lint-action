@@ -36,3 +36,5 @@ linters-settings:
     config:
       G302: "0644"
       G306: "0644"
+  perfsprint:
+    errorf: false       # annoying - forces errors.New() when no format strings in fmt.Errorf call
