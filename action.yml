@@ -5,7 +5,7 @@ author: 'cneill'
 inputs:
   go-version:
     description: 'The version of Go to set up for linting with golangci-lint'
-    default: '1.21'
+    default: '1.22'
     required: false
   custom-config:
     desciption: 'Set this to true if you want to lint your repo with the .golangci.yml file in your repository'
@@ -27,7 +27,7 @@ runs:
         go-version: '${{ inputs.go-version }}'
 
     - name: Run golangci-lint (global config)
-      uses: golangci/golangci-lint-action@v3  # TODO: replace with commit hash?
+      uses: golangci/golangci-lint-action@v6  # TODO: replace with commit hash?
       if: ${{ inputs.custom-config == 'false' }}
       with:
         args: "--config ${{ github.workspace }}/lint-action/.golangci.yml --go ${{ inputs.go-version }}"
