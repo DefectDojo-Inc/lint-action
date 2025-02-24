@@ -11,6 +11,10 @@ inputs:
     desciption: 'Set this to true if you want to lint your repo with the .golangci.yml file in your repository'
     default: false
     required: false
+  timeout:
+    description: 'Modify this if the linter is taking longer than the default timeout of 1m0s. Should be a Go duration'
+    default: '1m0s'
+    required: false
 runs:
   using: "composite"
   steps:
@@ -30,12 +34,12 @@ runs:
       uses: golangci/golangci-lint-action@v6  # TODO: replace with commit hash?
       if: ${{ inputs.custom-config == 'false' }}
       with:
-        args: "--config ${{ github.workspace }}/lint-action/.golangci.yml --go ${{ inputs.go-version }}"
+        args: "--config ${{ github.workspace }}/lint-action/.golangci.yml --go ${{ inputs.go-version }} --timeout ${{ inputs.timeout }}"
         version: latest  # TODO: replace with commit hash?
 
     - name: Run golangci-lint (repo config)
       uses: golangci/golangci-lint-action@v6  # TODO: replace with commit hash?
       if: ${{ inputs.custom-config == 'true' }}
       with:
-        args: "--go ${{ inputs.go-version }}"
+        args: "--go ${{ inputs.go-version }} --timeout ${{ inputs.timeout }}"
         version: latest  # TODO: replace with commit hash?
