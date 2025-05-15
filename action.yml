@@ -15,6 +15,9 @@ inputs:
     description: 'Modify this if the linter is taking longer than the default timeout of 1m0s. Should be a Go duration'
     default: '1m0s'
     required: false
+  working-directory:
+    description: 'Modify this if you need to lint something other than the root of the repository'
+    required: false
 runs:
   using: "composite"
   steps:
@@ -36,6 +39,7 @@ runs:
       with:
         args: "--config ${{ github.workspace }}/lint-action/.golangci.yml --go ${{ inputs.go-version }} --timeout ${{ inputs.timeout }}"
         version: latest  # TODO: replace with commit hash?
+        working-directory: '${{ inputs.working-directory }}'
 
     - name: Run golangci-lint (repo config)
       uses: golangci/golangci-lint-action@v6  # TODO: replace with commit hash?
@@ -43,3 +47,4 @@ runs:
       with:
         args: "--go ${{ inputs.go-version }} --timeout ${{ inputs.timeout }}"
         version: latest  # TODO: replace with commit hash?
+        working-directory: '${{ inputs.working-directory }}'
