@@ -37,14 +37,14 @@ runs:
       uses: golangci/golangci-lint-action@v8.0.0  # TODO: replace with commit hash?
       if: ${{ inputs.custom-config == 'false' }}
       with:
-        args: "--config ${{ github.workspace }}/lint-action/.golangci.yml --go ${{ inputs.go-version }} --timeout ${{ inputs.timeout }}"
+        args: "--config ${{ github.workspace }}/lint-action/.golangci.yml --timeout ${{ inputs.timeout }}"
         version: latest  # TODO: replace with commit hash?
         working-directory: '${{ inputs.working-directory }}'
 
     - name: Run golangci-lint (repo config)
-      uses: golangci/golangci-lint-action@v6  # TODO: replace with commit hash?
+      uses: golangci/golangci-lint-action@v8.0.0  # TODO: replace with commit hash?
       if: ${{ inputs.custom-config == 'true' }}
       with:
-        args: "--go ${{ inputs.go-version }} --timeout ${{ inputs.timeout }}"
+        args: "--timeout ${{ inputs.timeout }}"
         version: latest  # TODO: replace with commit hash?
         working-directory: '${{ inputs.working-directory }}'
