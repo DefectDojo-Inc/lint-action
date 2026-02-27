@@ -38,7 +38,7 @@ runs:
       if: ${{ inputs.custom-config == 'false' }}
       with:
         args: "--config ${{ github.workspace }}/lint-action/.golangci.yml --timeout ${{ inputs.timeout }}"
-        version: latest  # TODO: replace with commit hash?
+        version: 2.5.0  # Pin at golangci-lint v2.5.0
         working-directory: '${{ inputs.working-directory }}'
 
     - name: Run golangci-lint (repo config)
@@ -46,5 +46,5 @@ runs:
       if: ${{ inputs.custom-config == 'true' }}
       with:
         args: "--timeout ${{ inputs.timeout }}"
-        version: latest  # TODO: replace with commit hash?
+        version: 2.5.0  # Pin at golangci-lint v2.5.0
         working-directory: '${{ inputs.working-directory }}'
