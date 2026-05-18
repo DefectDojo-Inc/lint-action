@@ -1,0 +1,8 @@
+name: DefectDojo PR Cleanup
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  cleanup:
+    uses: DefectDojo-Inc/defectdojo-scan-and-fix/.github/workflows/pr-cleanup-reusable.yml@main
+    secrets: inherit

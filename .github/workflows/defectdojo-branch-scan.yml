@@ -1,0 +1,9 @@
+name: DefectDojo Branch Scan
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+jobs:
+  scan:
+    uses: DefectDojo-Inc/defectdojo-scan-and-fix/.github/workflows/branch-scan-reusable.yml@main
+    secrets: inherit
