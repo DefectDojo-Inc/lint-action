@@ -6,6 +6,7 @@ linters:
     - depguard                 # annoying - must maintain a constant whitelist of import-able packages
     - err113                   # annoying - no dynamic errors, forces named errors or wrapping errors
     - exhaustruct              # annoying - forces full struct initializations
+    - exhaustruct_v5           # same, for the v5 fork that `default: all` enables since v2.12
     - godot                    # annoying - ending all comments with periods
     - intrange                 # annoying - sometimes int ranges are okay, but forcing them doesn't always improve code clarity
     - mnd                      # annoying - magic numbers more annoying to alert on than deal with
@@ -15,9 +16,16 @@ linters:
     - funcorder                # Disabled during v2 conversion - new linting errors
     - embeddedstructfieldcheck # Disabled during v2 conversion - new linting errors
     - wsl                      # Deprecated and replaced with wsl_v5 since v2.2.0
+    - modernize                # new in v2.12 via `default: all` - adopt deliberately, not on a version bump
   settings:
     dupl:
       threshold: 1000
+    goconst:
+      ignore-tests: true       # v2.13 started scanning _test.go; table-test literals are not constants
+      ignore-map-keys: true    # map/struct keys are data, not constants to extract
+    govet:
+      disable:
+        - inline               # new analyzer in v2.13 - flags non-inlined stdlib constants
     forbidigo:
       forbid:
         - pattern: ^print.*$
@@ -36,6 +44,13 @@ linters:
       allow-whole-block: false
       branch-max-lines: 2
   exclusions:
+    rules:
+      - path: (^|/)mock\.go$
+        linters:
+          - goconst   # generated mocks: fixture strings are data, not constants
+      - path: (^|/)(test|testhelper)/
+        linters:
+          - goconst   # test helper packages: same reasoning
     generated: lax
     presets:
       - comments
