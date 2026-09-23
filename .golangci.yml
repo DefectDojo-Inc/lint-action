@@ -6,6 +6,7 @@ linters:
     - depguard                 # annoying - must maintain a constant whitelist of import-able packages
     - err113                   # annoying - no dynamic errors, forces named errors or wrapping errors
     - exhaustruct              # annoying - forces full struct initializations
+    - exhaustruct_v5           # same, for the v5 fork that `default: all` enables since v2.12
     - godot                    # annoying - ending all comments with periods
     - intrange                 # annoying - sometimes int ranges are okay, but forcing them doesn't always improve code clarity
     - mnd                      # annoying - magic numbers more annoying to alert on than deal with
@@ -18,6 +19,9 @@ linters:
   settings:
     dupl:
       threshold: 1000
+    goconst:
+      ignore-tests: true       # v2.13 started scanning _test.go; table-test literals are not constants
+      ignore-map-keys: true    # map/struct keys are data, not constants to extract
     forbidigo:
       forbid:
         - pattern: ^print.*$
