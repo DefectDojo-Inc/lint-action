@@ -16,16 +16,12 @@ linters:
     - funcorder                # Disabled during v2 conversion - new linting errors
     - embeddedstructfieldcheck # Disabled during v2 conversion - new linting errors
     - wsl                      # Deprecated and replaced with wsl_v5 since v2.2.0
-    - modernize                # new in v2.12 via `default: all` - adopt deliberately, not on a version bump
   settings:
     dupl:
       threshold: 1000
     goconst:
       ignore-tests: true       # v2.13 started scanning _test.go; table-test literals are not constants
       ignore-map-keys: true    # map/struct keys are data, not constants to extract
-    govet:
-      disable:
-        - inline               # new analyzer in v2.13 - flags non-inlined stdlib constants
     forbidigo:
       forbid:
         - pattern: ^print.*$
@@ -44,13 +40,6 @@ linters:
       allow-whole-block: false
       branch-max-lines: 2
   exclusions:
-    rules:
-      - path: (^|/)mock\.go$
-        linters:
-          - goconst   # generated mocks: fixture strings are data, not constants
-      - path: (^|/)(test|testhelper)/
-        linters:
-          - goconst   # test helper packages: same reasoning
     generated: lax
     presets:
       - comments
