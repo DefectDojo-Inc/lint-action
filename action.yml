@@ -9,7 +9,7 @@ inputs:
     required: false
   golangci-lint-version:
     description: 'The version of golangci-lint to use (e.g. v2.5.0)'
-    default: 'v2.13.2'
+    default: 'v2.14.0'
     required: false
   custom-config:
     description: 'Set this to true if you want to lint your repo with the .golangci.yml file in your repository'
