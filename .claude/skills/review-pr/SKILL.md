@@ -6,14 +6,14 @@ description: "Adversarial review of a DefectDojo-Inc/lint-action pull request (G
 # Review a lint-action pull request
 
 **Kind:** GitHub Action (composite) that runs golangci-lint with a shared org-wide `.golangci.yml`
-**Base branches:** `master` (default, what consumers use); `dev` exists but is 6 commits behind master and 0 ahead (recent PRs #15, #16 went straight to master) **Merge:** no merge queue; merge or squash allowed; 1 approval required from team `dd-inc-release-reviews` (org ruleset "Release repos: approval required"); no required status checks; thread resolution not required
+**Base branches:** `master` (default, what consumers use); `dev` exists but is 6 commits behind master and 0 ahead (recent PRs #15, #16 went straight to master) **Merge:** no merge queue; merge or squash allowed; 1 approval required from a designated reviewer team (org ruleset); no required status checks; thread resolution not required
 **Repo-local review skill:** none (repo has only `action.yml`, `.golangci.yml`, `.golangci.bck.yml`, `README.md`)
 
 Review a pull request for DefectDojo-Inc/lint-action. A complete review has three layers: **automated gates**, **hands-on verification** (run the change), and an **adversarial pass** (try to break it). Do all three before giving a verdict. Green CI alone is not a pass.
 
 Run this in a session that did **not** write the change. **Your job is to break the change, not to confirm it.** This skill never approves a PR; it produces a verdict.
 
-Adapted from the shared adversarial review in `DefectDojo-Inc/pr-batch-approve` (`.claude/skills/review-pr/SKILL.md`), which itself comes from dojo-pro's `review-pr`. The sections below the core process are specific to this repo.
+The sections below the core process are specific to this repo.
 
 ## Core process
 
@@ -52,7 +52,7 @@ cd <consumer-clone> && golangci-lint run --config <pr-clone>/.golangci.yml --tim
 4. **go-version default lags.** Default `go-version` is still `1.27.1` while consumers are on `go 1.27.2`. #16 says auto toolchain download covers it; httpclient's workflow comment says the lint runner pins `GOTOOLCHAIN=local` and an older toolchain fails package loading. These conflict. Unverified which is right: test a consumer that relies on the default `go-version`.
 5. **`custom-config` input.** Steps compare `inputs.custom-config == 'false'` / `'true'` while the input default is boolean `false`. Try a consumer with the input omitted, `true`, and `"True"`: exactly one golangci step must run in each case, never zero.
 6. **Supply chain.** `golangci/golangci-lint-action@v8.0.0`, `actions/checkout@v4`, `actions/setup-go@v5` are tag pinned, not SHA pinned (the file carries `# TODO: replace with commit hash?`). A PR changing a pin should move to a full SHA that matches the tag (`gh api repos/<o>/<r>/git/ref/tags/<tag>`). The action runs in consumers' jobs, so treat any new step as code running in ~17 repos.
-7. **Timeout.** Default `--timeout 1m0s`. A config that enables slower linters can push large consumers (connectors) past it. Time a run on the largest consumer.
+7. **Timeout.** Default `--timeout 1m0s`. A config that enables slower linters can push the largest consumers past it. Time a run on the largest consumer.
 
 ## Checklist additions
 - State the merge order with consumers: consumers that pin `golangci-lint-version` (httpclient and godojoapi pin `v2.13.2` on master and `v2.14.0` on dev explicitly) are unaffected by a default change; ones that rely on defaults change on merge.
@@ -73,7 +73,7 @@ cd <consumer-clone> && golangci-lint run --config <pr-clone>/.golangci.yml --tim
 - No CI, so no flaky jobs to record. Otherwise none found.
 
 ## Sources (audited 2026-10-16)
-- `gh api repos/DefectDojo-Inc/lint-action` (default branch, merge settings, visibility); `gh api repos/DefectDojo-Inc/lint-action/rules/branches/master` and `/dev`; `gh api orgs/DefectDojo-Inc/rulesets/25199653`; `gh api repos/DefectDojo-Inc/lint-action/branches`; `gh api repos/DefectDojo-Inc/lint-action/compare/master...dev`; `gh api repos/DefectDojo-Inc/lint-action/tags`
+- `gh api repos/DefectDojo-Inc/lint-action` (default branch, merge settings, visibility); `gh api repos/DefectDojo-Inc/lint-action/rules/branches/master` and `/dev`; `gh api repos/DefectDojo-Inc/lint-action/branches`; `gh api repos/DefectDojo-Inc/lint-action/compare/master...dev`; `gh api repos/DefectDojo-Inc/lint-action/tags`
 - `gh api repos/DefectDojo-Inc/lint-action/git/trees/master?recursive=1` and `dev`; contents on master: `action.yml`, `README.md`, `.golangci.yml`, `.golangci.bck.yml`
 - `gh api 'repos/DefectDojo-Inc/lint-action/pulls?state=closed&base=master&per_page=50'` and `base=dev`; PR bodies #10, #13, #14, #15, #16; PR files #15, #16; `gh api repos/DefectDojo-Inc/lint-action/commits?sha=master`; `gh pr list --state open` (none)
 - check runs on PR #16 head (none)
